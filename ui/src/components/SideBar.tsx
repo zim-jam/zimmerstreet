@@ -40,7 +40,6 @@ const SideBar = () => {
           items={navItems}
           aria-label="Sidebar navigation"
           selectionMode="single"
-          // 2. Pass our new calculated activeKey here
           selectedKeys={[activeKey]}
           className="gap-0.5 flex flex-col"
           onAction={(key) => navigate({ to: key.toString() })}
