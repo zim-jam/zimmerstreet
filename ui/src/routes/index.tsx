@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+
+import SideBar from "../components/SideBar";
+
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
-  return (
-    <div>
-      <h1>Zimmer Street</h1>
-    </div>
-  );
+  return <SideBar />;
 }
