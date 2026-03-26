@@ -12,7 +12,9 @@ const Dashboard = () => {
     <main className="flex-1 p-8 overflow-y-auto">
       <DashHeader />
       <div className="grid grid-cols-[1fr_316px] gap-3 p-6">
-        <Stock ticker={ticker} setTicker={setTicker} />
+        <div>
+          <Stock ticker={ticker} setTicker={setTicker} />
+        </div>
         <FuturePrices ticker={ticker} />
       </div>
       <News ticker={ticker} />

@@ -91,7 +91,7 @@ const FuturePrices = ({ ticker }: FuturePricesProps) => {
                 className="flex items-center justify-between rounded-lg px-1 py-1"
               >
                 <div className="flex items-center gap-3">
-                  <DayIcon className="w-6 h-6 text-default-500" />
+                  <DayIcon className="w-6 h-6 text-muted" />
 
                   <div className="flex flex-col">
                     <span className="text-foreground text-xs font-medium">
