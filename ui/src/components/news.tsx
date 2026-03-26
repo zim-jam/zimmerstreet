@@ -57,25 +57,30 @@ const News = ({ ticker }: NewsProps) => {
                   </div>
                 ) : (
                   <div className="text-center pt-8 text-muted">
-                    Please first select your stock
+                    Error in loading news
                   </div>
                 )
               }
             >
               {(item) => (
                 <Table.Row id={item.link}>
-                  <Table.Cell>
+                  <Table.Cell className="whitespace-nowrap">
                     <div className="flex items-center gap-2 font-medium">
                       <Globe className="text-muted w-4 h-4 shrink-0" />
                       <span>{item.publisher}</span>
                     </div>
                   </Table.Cell>
 
-                  <Table.Cell>
-                    <span className="text-sm block ">{item.title}</span>
+                  <Table.Cell className="w-full max-w-0">
+                    <span
+                      className="text-sm block truncate w-full"
+                      title={item.title}
+                    >
+                      {item.title}
+                    </span>
                   </Table.Cell>
 
-                  <Table.Cell className="text-muted text-xs">
+                  <Table.Cell className="text-muted text-xs whitespace-nowrap">
                     <Link
                       href={item.link}
                       target="_blank"
@@ -86,7 +91,7 @@ const News = ({ ticker }: NewsProps) => {
                     </Link>
                   </Table.Cell>
 
-                  <Table.Cell>
+                  <Table.Cell className="whitespace-nowrap">
                     <span className="text-right">
                       {new Date(item.publish_time).toLocaleDateString("en-US", {
                         month: "short",

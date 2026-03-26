@@ -1,8 +1,13 @@
-import { Button } from "@heroui/react";
+import { Button, Spinner } from "@heroui/react";
 
 import { ArrowDownToLine } from "@gravity-ui/icons";
 
-const DashHeader = () => {
+interface DashHeaderProps {
+  onDownload: () => void;
+  isDownloading?: boolean;
+}
+
+const DashHeader = ({ onDownload, isDownloading }: DashHeaderProps) => {
   var user = "Jatinjay Mohapatra";
   return (
     <div className="flex items-center justify-between">
@@ -10,9 +15,18 @@ const DashHeader = () => {
         Greetings, Mr. {user}
       </h1>
 
-      <Button variant="tertiary" size="sm">
-        <ArrowDownToLine />
-        Download Report
+      <Button
+        variant="tertiary"
+        size="sm"
+        onPress={onDownload}
+        isDisabled={isDownloading}
+      >
+        {isDownloading ? (
+          <Spinner size="sm" className="w-4 h-4" />
+        ) : (
+          <ArrowDownToLine className="w-4 h-4" />
+        )}
+        {isDownloading ? "Generating PDF..." : "Download Report"}
       </Button>
     </div>
   );

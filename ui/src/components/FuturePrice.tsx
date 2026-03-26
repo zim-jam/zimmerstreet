@@ -31,19 +31,6 @@ const iconMap: Record<number, React.ElementType> = {
 const FuturePrices = ({ ticker }: FuturePricesProps) => {
   const { data, isLoading, isError } = useForecast(ticker);
 
-  if (!ticker) {
-    return (
-      <div>
-        <h3 className="text-base font-semibold text-foreground">
-          Future Prices
-        </h3>
-        <div className="text-left pt-8 text-muted">
-          Please first select your stock
-        </div>
-      </div>
-    );
-  }
-
   if (isError) {
     return (
       <div className="text-danger text-sm">
