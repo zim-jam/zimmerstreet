@@ -56,7 +56,9 @@ const News = ({ ticker }: NewsProps) => {
                     <Spinner aria-label="Loading news..." />
                   </div>
                 ) : (
-                  "No recent news found."
+                  <div className="text-center pt-8 text-muted">
+                    Please first select your stock
+                  </div>
                 )
               }
             >
