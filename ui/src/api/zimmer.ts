@@ -18,12 +18,18 @@ export type TechnicalIndicators = {
   macd_histogram: number;
 };
 
+export type HistoricalPrice = {
+  date: string;
+  close: number;
+};
+
 export type PredictionResponse = {
   ticker: string;
   latest_date: string;
   latest_close_price: number;
   currency: string;
   forecast: ForecastDay[];
+  historical_prices: HistoricalPrice[];
   technical_indicators: TechnicalIndicators;
   recent_news: NewsItem[];
 };

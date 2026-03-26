@@ -52,12 +52,18 @@ class TechnicalIndicators(BaseModel):
     macd_histogram: float
 
 
+class HistoricalPrice(BaseModel):
+    date: str
+    close: float
+
+
 class PredictionResponse(BaseModel):
     ticker: str
     latest_date: str
     latest_close_price: float
     currency: str
     forecast: List[ForecastDay]
+    historical_prices: List[HistoricalPrice]
     technical_indicators: TechnicalIndicators
     recent_news: List[NewsItem]
 
@@ -242,12 +248,22 @@ async def get_5_day_forecast(ticker: str) -> PredictionResponse:
             "macd_histogram": round(float(live_row["MACD_Histogram"].values[0]), 2),
         }
 
+        recent_history = raw_data.tail(30)
+        historical_prices = [
+            {
+                "date": idx.strftime("%Y-%m-%d"),
+                "close": round(float(row["Close"]), 2)
+            }
+            for idx, row in recent_history.iterrows()
+        ]
+
         return {
             "ticker": ticker.upper(),
             "latest_date": latest_date.strftime("%Y-%m-%d"),
             "latest_close_price": round(latest_close, 2),
             "currency": currency,
             "forecast": forecast,
+            "historical_prices": historical_prices,
             "technical_indicators": indicators,
             "recent_news": fetch_stock_news(ticker),
         }
