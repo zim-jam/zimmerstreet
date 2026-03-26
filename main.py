@@ -1,5 +1,7 @@
+import urllib.request
+import xml.etree.ElementTree as ET
 import warnings
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import List, Tuple
 
 import numpy as np
@@ -140,34 +142,38 @@ def build_multi_day_targets(
 
 
 # ==========================================
-# News Fetching
+# News Fetching (Robust RSS Implementation)
 # ==========================================
 
 
-def fetch_stock_news(ticker_obj: yf.Ticker) -> List[dict]:
-    """Fetch latest news from yfinance."""
+def fetch_stock_news(ticker_symbol: str) -> List[dict]:
+    """Fetch latest news from Yahoo Finance official RSS feed."""
     try:
-        news_items = ticker_obj.news or []
+        url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={ticker_symbol}&region=US&lang=en-US"
+
+        # Add User-Agent to prevent 403 Forbidden errors
+        req = urllib.request.Request(
+            url, headers={'User-Agent': 'Mozilla/5.0'})
+
+        # Use a timeout (5 seconds) so a hanging network request doesn't freeze the API
+        with urllib.request.urlopen(req, timeout=5) as response:
+            xml_data = response.read()
+
+        root = ET.fromstring(xml_data)
         formatted_news: List[dict] = []
 
-        for item in news_items[:5]:
-            timestamp = item.get("providerPublishTime")
-            publish_time = (
-                datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
-                if timestamp
-                else ""
-            )
-
+        for item in root.findall('.//item')[:5]:
             formatted_news.append({
-                "title": item.get("title", "No Title"),
-                "publisher": item.get("publisher", "Unknown"),
-                "link": item.get("link", "#"),
-                "publish_time": publish_time,
+                "title": item.findtext('title') or "No Title",
+                "publisher": "Yahoo Finance",
+                "link": item.findtext('link') or "#",
+                "publish_time": item.findtext('pubDate') or ""
             })
 
         return formatted_news
 
-    except Exception:
+    except Exception as e:
+        print(f"News fetch error for {ticker_symbol}: {e}")
         return []
 
 
@@ -205,7 +211,7 @@ async def get_5_day_forecast(ticker: str) -> PredictionResponse:
             n_estimators=150,
             max_depth=8,
             random_state=42,
-            n_jobs=-1,  # ✅ parallel processing boost
+            n_jobs=-1,
         )
 
         model.fit(
@@ -243,7 +249,7 @@ async def get_5_day_forecast(ticker: str) -> PredictionResponse:
             "currency": currency,
             "forecast": forecast,
             "technical_indicators": indicators,
-            "recent_news": fetch_stock_news(stock),
+            "recent_news": fetch_stock_news(ticker),
         }
 
     except HTTPException:
