@@ -6,6 +6,9 @@ import {
   CircleNumber3,
   CircleNumber4,
   CircleNumber5,
+  CircleNumber6,
+  CircleNumber7,
+  CircleNumber8,
 } from "@gravity-ui/icons";
 
 import { useForecast } from "../hooks/useForecast";
@@ -20,6 +23,9 @@ const iconMap: Record<number, React.ElementType> = {
   3: CircleNumber3,
   4: CircleNumber4,
   5: CircleNumber5,
+  6: CircleNumber6,
+  7: CircleNumber7,
+  8: CircleNumber8,
 };
 
 const FuturePrices = ({ ticker }: FuturePricesProps) => {
@@ -77,7 +83,7 @@ const FuturePrices = ({ ticker }: FuturePricesProps) => {
         </div>
       </Card.Header>
 
-      <Card.Content className="flex flex-col gap-0.5 px-0 py-0">
+      <Card.Content className="flex flex-col gap-1.2 px-0 py-0">
         {isLoading ? (
           <div className="flex justify-center p-4">
             <Spinner size="sm" aria-label="Loading forecast..." />

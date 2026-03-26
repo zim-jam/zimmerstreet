@@ -7,15 +7,13 @@ interface StockProps {
 
 const Stock = ({ ticker, setTicker }: StockProps) => {
   return (
-    <div>
-      <Input
-        aria-label="Stock"
-        className="w-64"
-        placeholder="Enter stock symbol"
-        value={ticker}
-        onChange={(e) => setTicker(e.target.value)}
-      />
-    </div>
+    <Input
+      aria-label="Stock"
+      className="w-64"
+      placeholder="Enter stock symbol"
+      value={ticker}
+      onChange={(e) => setTicker(e.target.value)}
+    />
   );
 };
 

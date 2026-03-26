@@ -4,6 +4,7 @@ import DashHeader from "./DashHeader";
 import FuturePrices from "./FuturePrice";
 import News from "./news";
 import Stock from "./Stock";
+import PriceChart from "./PriceChart";
 
 const Dashboard = () => {
   const [ticker, setTicker] = useState("");
@@ -11,9 +12,10 @@ const Dashboard = () => {
   return (
     <main className="flex-1 p-8 overflow-y-auto">
       <DashHeader />
-      <div className="grid grid-cols-[1fr_316px] gap-3 p-6">
+      <div className="grid grid-cols-[1fr_316px] gap-3 p-4">
         <div>
           <Stock ticker={ticker} setTicker={setTicker} />
+          <PriceChart ticker={ticker} />
         </div>
         <FuturePrices ticker={ticker} />
       </div>
