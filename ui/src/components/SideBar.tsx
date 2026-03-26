@@ -1,4 +1,10 @@
-import { Avatar, ListBox, SearchField, Separator } from "@heroui/react";
+import {
+  Avatar,
+  ListBox,
+  SearchField,
+  Separator,
+  Tooltip,
+} from "@heroui/react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 
 import { House, Picture, FileText, CircleInfo, Code } from "@gravity-ui/icons";
@@ -22,10 +28,29 @@ const SideBar = () => {
       <aside className="flex flex-col gap-6 p-4 w-full">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-black">ZS</h1>
-          <Avatar>
-            <Avatar.Image alt="ZimJAM" src="/src/assets/images/avatar.jpeg" />
-            <Avatar.Fallback>Zim JAM</Avatar.Fallback>
-          </Avatar>
+
+          <Tooltip delay={0}>
+            <Tooltip.Trigger
+              aria-label="User profile"
+              className="cursor-pointer"
+            >
+              <Avatar>
+                <Avatar.Image
+                  alt="ZimJAM"
+                  src="/src/assets/images/avatar.jpeg"
+                />
+                <Avatar.Fallback>Zim JAM</Avatar.Fallback>
+              </Avatar>
+            </Tooltip.Trigger>
+
+            <Tooltip.Content showArrow className="outline">
+              <Tooltip.Arrow />
+              <div className="flex flex-col gap-0 py-1">
+                <p className="font-semibold text-sm">ZimJAM</p>
+                <p className="text-xs text-muted">zimjam@zimmerstreet.ml</p>
+              </div>
+            </Tooltip.Content>
+          </Tooltip>
         </div>
 
         <SearchField name="search">
