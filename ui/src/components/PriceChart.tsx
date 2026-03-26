@@ -101,7 +101,7 @@ const PriceChart = ({ ticker }: PriceChartProps) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="cursor-pointer text-xs font-medium transition-colors text-focus">
+            <button className="cursor-pointer text-xs font-medium transition-colors text-muted">
               1D
             </button>
           </div>
