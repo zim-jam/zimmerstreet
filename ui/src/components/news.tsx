@@ -45,7 +45,7 @@ const News = ({ ticker }: NewsProps) => {
               <Table.Column>Publisher</Table.Column>
               <Table.Column>Title</Table.Column>
               <Table.Column>Action</Table.Column>
-              <Table.Column className="text-right">Date</Table.Column>
+              <Table.Column>Date</Table.Column>
             </Table.Header>
 
             <Table.Body
