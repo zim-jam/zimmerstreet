@@ -29,7 +29,7 @@ export type PredictionResponse = {
 };
 
 const API_BASE: string =
-  (import.meta.env.VITE_API_BASE as string) || "http://localhost:8000";
+  (import.meta.env.VITE_ZS as string) || "http://localhost:8000";
 const DEFAULT_TIMEOUT = 10_000; // ms
 
 export class ApiError extends Error {
