@@ -14,11 +14,11 @@ const SideBar = () => {
   const location = useLocation();
 
   const navItems = [
-    { label: "Dashboard", path: "/", Icon: House },
-    { label: "Algorithm Used", path: "/algorithm", Icon: Code },
-    { label: "Poster", path: "/poster", Icon: Picture },
-    { label: "Report", path: "/report", Icon: FileText },
-    { label: "About", path: "/about", Icon: CircleInfo },
+    { label: "Dashboard", id: "/", Icon: House },
+    { label: "Algorithm Used", id: "algorithm", Icon: Code },
+    { label: "Poster", id: "poster", Icon: Picture },
+    { label: "Report", id: "report", Icon: FileText },
+    { label: "About", id: "about", Icon: CircleInfo },
   ];
 
   const activeKey = location.pathname === "/" ? "/" : location.pathname;
@@ -66,12 +66,18 @@ const SideBar = () => {
           aria-label="Sidebar navigation"
           selectionMode="single"
           selectedKeys={[activeKey]}
+          disallowEmptySelection
           className="gap-0.5 flex flex-col"
-          onAction={(key) => navigate({ to: key.toString() })}
+          onSelectionChange={(keys) => {
+            const selectedKey = Array.from(keys)[0];
+            if (selectedKey) {
+              navigate({ to: selectedKey.toString() });
+            }
+          }}
         >
           {(item) => (
             <ListBox.Item
-              id={item.path}
+              key={item.id}
               textValue={item.label}
               className="group p-2 cursor-pointer data-[selected=true]:bg-default text-sm font-medium flex items-center gap-3"
             >
