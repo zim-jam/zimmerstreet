@@ -1,34 +1,19 @@
-import { useState, useMemo } from "react";
-import { Table, Pagination, Spinner, Link } from "@heroui/react";
-
+import { Table, Spinner, Link } from "@heroui/react";
 import { Globe } from "@gravity-ui/icons";
-
 import { useForecast } from "../hooks/useForecast";
 
 interface NewsProps {
   ticker: string;
 }
 
-const News = ({ ticker }: NewsProps) => {
+const NewsTable = ({ ticker }: NewsProps) => {
   const { data, isLoading, isError } = useForecast(ticker);
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 5;
 
   const news = data?.recent_news || [];
-  const pages = Math.ceil(news.length / rowsPerPage) || 1;
-
-  const items = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    return news.slice(start, end);
-  }, [page, news]);
 
   if (isError) {
     return <div className="text-danger">Failed to load news for {ticker}.</div>;
   }
-
-  const startItem = news.length === 0 ? 0 : (page - 1) * rowsPerPage + 1;
-  const endItem = Math.min(page * rowsPerPage, news.length);
 
   return (
     <div className="flex flex-col gap-4">
@@ -49,7 +34,7 @@ const News = ({ ticker }: NewsProps) => {
             </Table.Header>
 
             <Table.Body
-              items={items}
+              items={news}
               renderEmptyState={() =>
                 isLoading ? (
                   <div className="flex justify-center p-4">
@@ -57,7 +42,7 @@ const News = ({ ticker }: NewsProps) => {
                   </div>
                 ) : (
                   <div className="text-center pt-8 text-muted">
-                    Error in loading news
+                    No news available
                   </div>
                 )
               }
@@ -105,39 +90,9 @@ const News = ({ ticker }: NewsProps) => {
             </Table.Body>
           </Table.Content>
         </Table.ScrollContainer>
-
-        <Table.Footer>
-          {pages > 0 && (
-            <Pagination size="sm" className="px-4 py-2.5">
-              <Pagination.Summary>
-                {startItem} to {endItem} of {news.length} news
-              </Pagination.Summary>
-              <Pagination.Content>
-                <Pagination.Item>
-                  <Pagination.Previous
-                    isDisabled={page === 1}
-                    onPress={() => setPage((p) => Math.max(1, p - 1))}
-                  >
-                    <Pagination.PreviousIcon />
-                    <span>Previous</span>
-                  </Pagination.Previous>
-                </Pagination.Item>
-                <Pagination.Item>
-                  <Pagination.Next
-                    isDisabled={page === pages}
-                    onPress={() => setPage((p) => Math.min(pages, p + 1))}
-                  >
-                    <span>Next</span>
-                    <Pagination.NextIcon />
-                  </Pagination.Next>
-                </Pagination.Item>
-              </Pagination.Content>
-            </Pagination>
-          )}
-        </Table.Footer>
       </Table>
     </div>
   );
 };
 
-export default News;
+export default NewsTable;

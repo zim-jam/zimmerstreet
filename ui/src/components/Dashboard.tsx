@@ -4,7 +4,6 @@ import jsPDF from "jspdf";
 
 import DashHeader from "./DashHeader";
 import FuturePrices from "./FuturePrice";
-import News from "./news";
 import Stock from "./Stock";
 import PriceChart from "./PriceChart";
 
@@ -59,7 +58,6 @@ const Dashboard = () => {
         </div>
         <FuturePrices ticker={ticker} />
       </div>
-      <News ticker={ticker} />
     </main>
   );
 };

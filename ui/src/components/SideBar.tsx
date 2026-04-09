@@ -7,7 +7,14 @@ import {
 } from "@heroui/react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 
-import { House, Picture, FileText, CircleInfo, Code } from "@gravity-ui/icons";
+import {
+  House,
+  Picture,
+  FileText,
+  CircleInfo,
+  Code,
+  FileRuble,
+} from "@gravity-ui/icons";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -15,6 +22,7 @@ const SideBar = () => {
 
   const navItems = [
     { label: "Dashboard", id: "/", Icon: House },
+    { label: "News", id: "news", Icon: FileRuble },
     { label: "Algorithm Used", id: "algorithm", Icon: Code },
     { label: "Poster", id: "poster", Icon: Picture },
     { label: "Report", id: "report", Icon: FileText },
@@ -24,8 +32,8 @@ const SideBar = () => {
   const activeKey = location.pathname === "/" ? "/" : location.pathname;
 
   return (
-    <div className="flex h-screen w-64">
-      <aside className="flex flex-col gap-6 p-4 w-full">
+    <div className="flex w-64">
+      <aside className="sticky top-0 self-start h-screen flex flex-col gap-6 p-4 w-full overflow-y-auto">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-black">ZS</h1>
 

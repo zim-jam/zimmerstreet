@@ -168,7 +168,7 @@ def fetch_stock_news(ticker_symbol: str) -> List[dict]:
         root = ET.fromstring(xml_data)
         formatted_news: List[dict] = []
 
-        for item in root.findall('.//item')[:10]:
+        for item in root.findall('.//item')[:20]:
             formatted_news.append({
                 "title": item.findtext('title') or "No Title",
                 "publisher": "Yahoo Finance",
