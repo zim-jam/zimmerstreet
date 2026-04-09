@@ -78,8 +78,6 @@ const LockScreen = ({ children }: LockScreenProps) => {
       </div>
     );
   }
-
-  return <>{children}</>;
 };
 
 export default LockScreen;
