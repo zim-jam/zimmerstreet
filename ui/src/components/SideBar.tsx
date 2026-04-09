@@ -22,11 +22,11 @@ const SideBar = () => {
 
   const navItems = [
     { label: "Dashboard", id: "/", Icon: House },
-    { label: "News", id: "news", Icon: FileRuble },
-    { label: "Algorithm Used", id: "algorithm", Icon: Code },
-    { label: "Poster", id: "poster", Icon: Picture },
-    { label: "Report", id: "report", Icon: FileText },
-    { label: "About", id: "about", Icon: CircleInfo },
+    { label: "News", id: "/news", Icon: FileRuble },
+    { label: "Algorithm Used", id: "/algorithm", Icon: Code },
+    { label: "Poster", id: "/poster", Icon: Picture },
+    { label: "Report", id: "/report", Icon: FileText },
+    { label: "About", id: "/about", Icon: CircleInfo },
   ];
 
   const activeKey = location.pathname === "/" ? "/" : location.pathname;

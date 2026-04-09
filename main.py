@@ -25,7 +25,7 @@ FEATURE_COLS: List[str] = [
     "RSI_14", "MACD", "MACD_Signal", "MACD_Histogram",
 ]
 
-FORECAST_DAYS: int = 8
+FORECAST_DAYS: int = 16
 
 # ==========================================
 # Pydantic Models
@@ -74,7 +74,7 @@ class PredictionResponse(BaseModel):
 
 app = FastAPI(
     title="Quant Trading Regressor API",
-    description="Predicts next 8 days of stock prices using RandomForest",
+    description="Predicts next 16 days of stock prices using RandomForest",
     version="1.0.0",
 )
 
@@ -189,8 +189,8 @@ def fetch_stock_news(ticker_symbol: str) -> List[dict]:
 
 
 @app.get("/api/v1/forecast/{ticker}", response_model=PredictionResponse)
-async def get_8_day_forecast(ticker: str) -> PredictionResponse:
-    """Return 8-day price forecast for a given stock ticker."""
+async def get_16_day_forecast(ticker: str) -> PredictionResponse:
+    """Return 16-day price forecast for a given stock ticker."""
     try:
         stock = yf.Ticker(ticker)
         raw_data = stock.history(period="3y")

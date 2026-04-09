@@ -6,6 +6,7 @@ import DashHeader from "./DashHeader";
 import FuturePrices from "./FuturePrice";
 import Stock from "./Stock";
 import PriceChart from "./PriceChart";
+import Summarize from "./summarise";
 
 const Dashboard = () => {
   const [ticker, setTicker] = useState("NVDA");
@@ -52,9 +53,10 @@ const Dashboard = () => {
         isDownloading={isDownloading}
       />
       <div ref={printRef} className="grid grid-cols-[1fr_316px] gap-3 p-4">
-        <div>
+        <div className="flex flex-col gap-3">
           <Stock ticker={ticker} setTicker={setTicker} />
           <PriceChart ticker={ticker} />
+          <Summarize ticker={ticker} />
         </div>
         <FuturePrices ticker={ticker} />
       </div>

@@ -1,6 +1,7 @@
 import { Card, Chip, Spinner } from "@heroui/react";
 
 import {
+  CircleNumber0,
   CircleNumber1,
   CircleNumber2,
   CircleNumber3,
@@ -9,6 +10,7 @@ import {
   CircleNumber6,
   CircleNumber7,
   CircleNumber8,
+  CircleNumber9,
 } from "@gravity-ui/icons";
 
 import { useForecast } from "../hooks/useForecast";
@@ -17,7 +19,8 @@ interface FuturePricesProps {
   ticker: string;
 }
 
-const iconMap: Record<number, React.ElementType> = {
+const digitMap: Record<number, React.ElementType> = {
+  0: CircleNumber0,
   1: CircleNumber1,
   2: CircleNumber2,
   3: CircleNumber3,
@@ -26,6 +29,7 @@ const iconMap: Record<number, React.ElementType> = {
   6: CircleNumber6,
   7: CircleNumber7,
   8: CircleNumber8,
+  9: CircleNumber9,
 };
 
 const FuturePrices = ({ ticker }: FuturePricesProps) => {
@@ -70,6 +74,19 @@ const FuturePrices = ({ ticker }: FuturePricesProps) => {
     });
   };
 
+  const renderDayIcon = (dayNumber: number) => {
+    const digits = Math.abs(dayNumber).toString().split("").map(Number);
+
+    return (
+      <div className="flex space-x-px items-center">
+        {digits.map((d, i) => {
+          const Icon = digitMap[d] || CircleNumber1;
+          return <Icon key={i} className="w-6 h-6 text-muted shrink-0" />;
+        })}
+      </div>
+    );
+  };
+
   return (
     <Card className="bg-transparent shadow-none border-none w-full max-w-sm">
       <Card.Header className="flex-row items-center justify-between">
@@ -90,14 +107,13 @@ const FuturePrices = ({ ticker }: FuturePricesProps) => {
           </div>
         ) : (
           forecast.map((day) => {
-            const DayIcon = iconMap[day.day_ahead] || CircleNumber1;
             return (
               <div
                 key={day.day_ahead}
                 className="flex items-center justify-between rounded-lg px-1 py-1"
               >
                 <div className="flex items-center gap-3">
-                  <DayIcon className="w-6 h-6 text-muted" />
+                  {renderDayIcon(day.day_ahead)}
 
                   <div className="flex flex-col">
                     <span className="text-foreground text-xs font-medium">
