@@ -33,12 +33,21 @@ const Dashboard = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 200));
 
-      const width = element.offsetWidth;
-      const height = element.offsetHeight;
+      const width = element.scrollWidth;
+      const height = element.scrollHeight;
 
       const imgData = await toPng(element, {
         pixelRatio: 2,
         backgroundColor: "#18181b",
+        width: width,
+        height: height,
+        style: {
+          overflow: "visible",
+        },
+        filter: (node) => {
+          const exclusionId = "no-export";
+          return node.id !== exclusionId;
+        },
       });
 
       const pdf = new jsPDF({
@@ -58,12 +67,14 @@ const Dashboard = () => {
 
   return (
     <LockScreen>
-      <main className="flex-1 p-8 overflow-y-auto">
-        <DashHeader
-          onDownload={handleDownloadPdf}
-          isDownloading={isDownloading}
-        />
-        <div ref={printRef} className="grid grid-cols-[1fr_316px] gap-3 p-4">
+      <main ref={printRef} className="flex-1 p-8 overflow-y-auto">
+        <div id="no-export">
+          <DashHeader
+            onDownload={handleDownloadPdf}
+            isDownloading={isDownloading}
+          />
+        </div>
+        <div className="grid grid-cols-[1fr_316px] gap-3 p-4">
           <div className="flex flex-col gap-3">
             <Stock ticker={ticker} setTicker={setTicker} />
             <PriceChart ticker={ticker} />
