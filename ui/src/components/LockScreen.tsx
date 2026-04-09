@@ -11,7 +11,7 @@ const LockScreen = ({ children }: LockScreenProps) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
-  const SECRET_CODE = "quant";
+  const SECRET_CODE = import.meta.env.VITE_PASSWORD;
 
   const handleUnlock = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -78,6 +78,8 @@ const LockScreen = ({ children }: LockScreenProps) => {
       </div>
     );
   }
+
+  return <>{children}</>;
 };
 
 export default LockScreen;
