@@ -6,10 +6,10 @@ import SideBar from "../components/SideBar";
 import Stock from "../components/Stock";
 
 export const Route = createFileRoute("/news")({
-  component: NewsComponent,
+  component: RouteComponent,
 });
 
-function NewsComponent() {
+function RouteComponent() {
   const [ticker, setTicker] = useState("NVDA");
   return (
     <div className="flex">

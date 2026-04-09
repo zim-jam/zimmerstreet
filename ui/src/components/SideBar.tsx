@@ -42,13 +42,15 @@ const SideBar = () => {
               aria-label="User profile"
               className="cursor-pointer"
             >
-              <Avatar>
-                <Avatar.Image
-                  alt="ZimJAM"
-                  src="/src/assets/images/avatar.jpeg"
-                />
-                <Avatar.Fallback>Zim JAM</Avatar.Fallback>
-              </Avatar>
+              <a href="/profile">
+                <Avatar>
+                  <Avatar.Image
+                    alt="ZimJAM"
+                    src="/src/assets/images/avatar.jpeg"
+                  />
+                  <Avatar.Fallback>Zim JAM</Avatar.Fallback>
+                </Avatar>
+              </a>
             </Tooltip.Trigger>
 
             <Tooltip.Content showArrow className="outline">
