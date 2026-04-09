@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
@@ -10,10 +11,18 @@ import Summarize from "./summarise";
 import LockScreen from "./LockScreen";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [ticker, setTicker] = useState("NVDA");
   const [isDownloading, setIsDownloading] = useState(false);
 
   const printRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("quantUserProfile");
+    if (!savedUser) {
+      navigate({ to: "/profile" });
+    }
+  }, [navigate]);
 
   const handleDownloadPdf = async () => {
     const element = printRef.current;
