@@ -10,7 +10,11 @@ import yfinance as yf
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import StandardScaler
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import TensorDataset, DataLoader
 
 # ==========================================
 # Configurations
@@ -26,6 +30,25 @@ FEATURE_COLS: List[str] = [
 ]
 
 FORECAST_DAYS: int = 16
+
+# ==========================================
+# Model Definition
+# ==========================================
+
+
+class StockLSTM(nn.Module):
+    def __init__(self, input_size: int, hidden_size: int, output_size: int):
+        super(StockLSTM, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        # x shape: (batch, time_steps, features)
+        out, _ = self.lstm(x)
+        # Take the output from the last time step
+        out = out[:, -1, :]
+        out = self.fc(out)
+        return out
 
 # ==========================================
 # Pydantic Models
@@ -74,7 +97,7 @@ class PredictionResponse(BaseModel):
 
 app = FastAPI(
     title="Quant Trading Regressor API",
-    description="Predicts next 16 days of stock prices using RandomForest",
+    description="Predicts next 16 days of stock prices using LSTM",
     version="1.0.0",
 )
 
@@ -212,21 +235,48 @@ async def get_16_day_forecast(ticker: str) -> PredictionResponse:
         historical_data = data.dropna(subset=target_cols)
         live_row = data.iloc[[-1]]
 
-        # Training
-        model = RandomForestRegressor(
-            n_estimators=150,
-            max_depth=8,
-            random_state=42,
-            n_jobs=-1,
-        )
+        # Scaling for LSTM
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(historical_data[FEATURE_COLS])
+        X_live_scaled = scaler.transform(live_row[FEATURE_COLS])
 
-        model.fit(
-            historical_data[FEATURE_COLS],
-            historical_data[target_cols],
-        )
+        # Reshape for LSTM: (samples, time_steps, features)
+        X_train_seq = X_train_scaled.reshape(
+            (X_train_scaled.shape[0], 1, X_train_scaled.shape[1]))
+        X_live_seq = X_live_scaled.reshape(
+            (X_live_scaled.shape[0], 1, X_live_scaled.shape[1]))
+        y_train_seq = historical_data[target_cols].values
+
+        # Convert to tensors
+        X_train_tensor = torch.tensor(X_train_seq, dtype=torch.float32)
+        y_train_tensor = torch.tensor(y_train_seq, dtype=torch.float32)
+        X_live_tensor = torch.tensor(X_live_seq, dtype=torch.float32)
+
+        # Data Loader
+        dataset = TensorDataset(X_train_tensor, y_train_tensor)
+        dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+
+        # Initialize Model, Loss, and Optimizer
+        model = StockLSTM(input_size=len(FEATURE_COLS),
+                          hidden_size=50, output_size=len(target_cols))
+        criterion = nn.MSELoss()
+        optimizer = optim.Adam(model.parameters())
+
+        # Training Loop
+        model.train()
+        for epoch in range(50):
+            for batch_X, batch_y in dataloader:
+                optimizer.zero_grad()
+                outputs = model(batch_X)
+                loss = criterion(outputs, batch_y)
+                loss.backward()
+                optimizer.step()
 
         # Prediction
-        predicted_returns = model.predict(live_row[FEATURE_COLS])[0]
+        model.eval()
+        with torch.no_grad():
+            predicted_returns_tensor = model(X_live_tensor)
+            predicted_returns = predicted_returns_tensor.numpy()[0]
 
         latest_close = float(live_row["Close"].values[0])
         latest_date = live_row.index[0]

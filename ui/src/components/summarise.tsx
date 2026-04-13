@@ -56,13 +56,13 @@ const Summarize = ({ ticker }: SummarizeProps) => {
 
 Underpinning this price action, current indicators provide critical context. The asset registers an RSI of ${rsi.toFixed(2)}, suggesting ${rsiContext}. Concurrently, momentum profiles exhibit a ${momentum} MACD structure. Crucially, the MACD histogram rests at ${hist.toFixed(2)}, indicating that this momentum is ${momentumPace}, which statistically validates the model's short-term directional bias. 
 
-Derived from a Random Forest regressor trained on a 3-year trailing dataset of 14 engineered technical and volatility features, this projection forms a robust baseline. However, traders must strictly weigh this algorithmic output against impending fundamental catalysts, volume anomalies, and broader macroeconomic news to optimize entry points and effectively manage portfolio risk.`;
+Derived from an LSTM neural network trained on a 3-year trailing dataset of 14 engineered technical and volatility features, this projection forms a robust baseline. However, traders must strictly weigh this algorithmic output against impending fundamental catalysts, volume anomalies, and broader macroeconomic news to optimize entry points and effectively manage portfolio risk.`;
 
   return (
     <div className="mt-4 p-4 bg-content1 rounded-2xl border border-divider flex items-start gap-3 shadow-sm">
       <Sparkles className="w-5 h-5 text-primary shrink-0 mt-1" />
-          <div className="flex flex-col gap-3">
-              <h2 className="text-lg font-bold text-foreground">Forecast Summary</h2>
+      <div className="flex flex-col gap-3">
+        <h2 className="text-lg font-bold text-foreground">Forecast Summary</h2>
         {summaryText.split("\n\n").map((paragraph, index) => (
           <p
             key={index}
